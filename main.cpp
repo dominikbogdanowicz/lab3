@@ -1,7 +1,7 @@
 // Kontenery
 #include <vector>	// Tablica
-#include <set>		// ZbiÃ³r
-#include <map>		// SÅ‚ownik
+#include <set>		// Zbiór
+#include <map>		// S³ownik
 
 // Adaptery
 #include <queue>	// Kolejka
@@ -47,22 +47,44 @@ void containers(Slav * slavs, int n)
 	REPORT_CONTAINERS;
 	printf("## vector\n");
 
-	// UmieÅ›Ä‡ SÅ‚owian w losowej kolejnoÅ›ci w wektorze.
+	// Umieœæ S³owian w losowej kolejnoœci w wektorze.
+	vectorOfSlavs.push_back(&slavs[0]);
+	
+	srand(time(NULL));
+	for (int i=1;i<n;i++)
+	{
+		int x=rand()%(vectorOfSlavs.size()+1);
+		vectorOfSlavs.insert(vectorOfSlavs.begin()+x,&slavs[i]);}
 
-	// WykorzystujÄ…c iterator i funkcjÄ™ description(), wyÅ›wietl wszystkich SÅ‚owian w wektorze
+	// Wykorzystuj¹c iterator i funkcjê description(), wyœwietl wszystkich S³owian w wektorze
+	vector <Slav *>:: iterator it=vectorOfSlavs.begin();
+	for (it;it!=vectorOfSlavs.end();it++)
+		cout<<(**it).description()<<endl;
 
 	REPORT_CONTAINERS;
 	printf("## set\n");
 
-	// PrzenieÅ› wszystkich SÅ‚owian z wektoru do zbioru.
+	// Przenieœ wszystkich S³owian z wektoru do zbioru.
+	for (int i=0;i<n;i++)
+	setOfSlavs.insert(vectorOfSlavs[i]);
+	vectorOfSlavs.clear();
 	
 	REPORT_CONTAINERS;
 	printf("## map\n");
 
-	// StwÃ³rz sÅ‚ownik tworzÄ…cy pary SÅ‚owian, z tych znajdujÄ…cych siÄ™ w zbiorze, czyszczÄ…c zbiÃ³r
-	
-	// WykorzystujÄ…c iterator, wyÅ›wietl wszystkie pary SÅ‚owian
-	
+	// Stwórz s³ownik tworz¹cy pary S³owian, z tych znajduj¹cych siê w zbiorze, czyszcz¹c zbiór
+	for (set<Slav*>::iterator it_set=setOfSlavs.begin();
+	it_set!=setOfSlavs.end();)
+	{	
+		mapOfSlavs[*it_set]=*(it_set=setOfSlavs.erase(it_set));
+		it_set=setOfSlavs.erase(it_set);
+	}
+	// Wykorzystuj¹c iterator, wyœwietl wszystkie pary S³owian	
+	for (map<Slav*,Slav*>::iterator it_set=mapOfSlavs.begin(); 				it_set!=mapOfSlavs.end(); it_set++)
+ 	{
+ 	cout<<(*(*it_set).first).description()<<"---";
+	cout<<(*(*it_set).second).description()<<endl;
+	}
 	REPORT_CONTAINERS;
 }
 
@@ -75,16 +97,30 @@ void adapters(Slav * slavs, int n)
 	REPORT_ADAPTERS;
 	printf("## queue\n");
 
-	// UmieÅ›Ä‡ SÅ‚owian w kolejce.
+	// Umieœæ S³owian w kolejce.
+	for (int i=0; i<n;i++)
+	{
+		queueOfSlavs.push(&slavs[i]);		
+	}
 	
 	REPORT_ADAPTERS;
 
 	printf("## stack\n");
-	// PrzenieÅ› SÅ‚owian z kolejki do stosu.
+	// Przenieœ S³owian z kolejki do stosu.
+	while(!queueOfSlavs.empty())
+	{
+		stackOfSlavs.push(queueOfSlavs.front());
+		queueOfSlavs.pop();
+	}
 
 	REPORT_ADAPTERS;
 
-	// WyÅ›wietl SÅ‚owian zdejmowanych ze stosu.
+	// Wyœwietl S³owian zdejmowanych ze stosu.
+		while(!stackOfSlavs.empty())
+	{
+		cout<<stackOfSlavs.top()->description()<<endl	;
+		stackOfSlavs.pop();
+	}
 
 	REPORT_ADAPTERS;
 }
